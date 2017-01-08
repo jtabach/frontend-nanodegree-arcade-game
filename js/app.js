@@ -32,7 +32,7 @@ Enemy.prototype.update = function(dt) {
   // all computers.
   if (this.x < canvas.limit.right + colLength) {
     this.x += this.speed * dt;
-    checkCollision(this);
+    this.checkCollision();
   } else {
     this.reset();
   }
@@ -43,6 +43,12 @@ Enemy.prototype.reset = function() {
   this.speed = getRandomSpeed();
   this.x = -colLength;
   this.y = getRandomRow();
+}
+
+Enemy.prototype.checkCollision = function() {
+  if (this.y === player.y && this.x > player.x - colLength/2 && this.x < player.x + colLength/2) {
+    player.reset();
+  }
 }
 
 // Now write your own player class
@@ -117,13 +123,6 @@ document.addEventListener('keyup', function(e) {
 
   player.handleInput(allowedKeys[e.keyCode]);
 });
-
-// TODO: maybe this should be moved to a method on Enemy
-function checkCollision(enemy) {
-  if (enemy.y === player.y && enemy.x > player.x - colLength/2 && enemy.x < player.x + colLength/2) {
-    player.reset();
-  }
-}
 
 function getRandomSpeed() {
   return (1 + Math.random()) * enemySpeedMulitplier;
