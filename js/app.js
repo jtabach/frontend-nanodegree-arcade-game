@@ -2,18 +2,30 @@
 var colLength = 101;
 var rowLength = 83;
 
+// Super class for creating Player and Enemy
+var Char = function(sprite, x, y) {
+  this.sprite = sprite;
+  this.x = x;
+  this.y = y;
+}
+
+Char.prototype.render = function() {
+  ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+};
+
 // Enemies our player must avoid
-var Enemy = function(speed, y) {
+var Enemy = function(sprite, y, speed) {
     // Variables applied to each of our instances go here,
     // we've provided one for you to get started
 
     // The image/sprite for our enemies, this uses
     // a helper we've provided to easily load images
-    this.sprite = 'images/enemy-bug.png';
+    Char.call(this, sprite, -colLength, y)
     this.speed = speed;
-    this.x = -colLength;
-    this.y = y;
 };
+
+Enemy.prototype = Object.create(Char.prototype);
+Enemy.prototype.constructor = Enemy;
 
 // Update the enemy's position, required method for game
 // Parameter: dt, a time delta between ticks
@@ -42,13 +54,11 @@ Enemy.prototype.render = function() {
 // Now write your own player class
 // This class requires an update(), render() and
 // a handleInput() method.
-var Player = function() {
-  this.sprite = 'images/char-boy.png';
-  this.x = 202;
-  this.y = 386;
+var Player = function(sprite, x, y) {
+  Char.call(this, sprite, x, y);
 }
 
-Player.prototype = Object.create(Enemy.prototype);
+Player.prototype = Object.create(Char.prototype);
 Player.prototype.constructor = Player;
 
 Player.prototype.update = function(x, y) {
@@ -95,10 +105,10 @@ Player.prototype.reset = function(x) {
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
-var enemy1 = new Enemy(200, 143);
-var enemy2 = new Enemy(300, 60);
-var enemy3 = new Enemy(100, 226);
-var player = new Player();
+var enemy1 = new Enemy('images/enemy-bug.png', 143, 200);
+var enemy2 = new Enemy('images/enemy-bug.png', 60, 300);
+var enemy3 = new Enemy('images/enemy-bug.png', 226, 100);
+var player = new Player('images/char-boy.png', 202, 386);
 var allEnemies = [enemy1, enemy2, enemy3];
 
 
