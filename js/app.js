@@ -2,7 +2,7 @@
 var colLength = canvas.limit.right/4;
 var rowLength = (canvas.limit.bottom - canvas.limit.top)/4;
 var enemySpeedMulitplier = 200;
-var playerStart
+var wins = 0;
 
 // Super class for creating Player and Enemy
 var Char = function(sprite, x, y) {
@@ -85,7 +85,7 @@ Player.prototype.handleInput = function(direction) {
       if (this.y > canvas.limit.top) {
         this.update(0, -rowLength);
       } else {
-        console.log('winner'); // TODO: More exciting win condition
+        updateWinCount();
         this.reset();
       }
       break;
@@ -123,6 +123,11 @@ document.addEventListener('keyup', function(e) {
 
   player.handleInput(allowedKeys[e.keyCode]);
 });
+
+function updateWinCount() {
+  wins++;
+  document.getElementById("wins").innerHTML = wins;
+}
 
 function getRandomSpeed() {
   return (1 + Math.random()) * enemySpeedMulitplier;
