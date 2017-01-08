@@ -11,11 +11,12 @@ var Char = function(sprite, x, y) {
   this.y = y;
 }
 
+// Renders characters to the canvas
 Char.prototype.render = function() {
   ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
-// Enemies your player must avoid
+// Create enemy class by calling the Char superclass
 var Enemy = function(sprite, y, speed) {
   Char.call(this, sprite, -colLength, y)
   this.speed = speed;
@@ -38,15 +39,17 @@ Enemy.prototype.update = function(dt) {
   }
 };
 
-// Reset Enemy with new row and speed
+// Reset Enemy when enemy reaches canvas limit with new row and speed
 Enemy.prototype.reset = function() {
   this.speed = getRandomSpeed();
   this.x = -colLength;
   this.y = getRandomRow();
 }
 
+// check Enemy position in comparison to player to determine if a collision has occured
 Enemy.prototype.checkCollision = function() {
   if (this.y === player.y && this.x > player.x - colLength/2 && this.x < player.x + colLength/2) {
+    // Decision to only reset the player to allow for smoother game flow
     player.reset();
   }
 }
@@ -61,6 +64,7 @@ var Player = function(sprite, x, y) {
 Player.prototype = Object.create(Char.prototype);
 Player.prototype.constructor = Player;
 
+// Update Player's position
 Player.prototype.update = function(x, y) {
   if(x || y) {
     this.x += x;
@@ -68,6 +72,7 @@ Player.prototype.update = function(x, y) {
   }
 };
 
+// Handle user input (keyup) and invokes Player.update with respect to canvas limits
 Player.prototype.handleInput = function(direction) {
   var x;
   switch(direction) {
@@ -97,6 +102,7 @@ Player.prototype.handleInput = function(direction) {
   }
 };
 
+// Resets Player to starting position either on collision or win condition
 Player.prototype.reset = function() {
   this.x = canvas.limit.right/2;
   this.y = canvas.limit.bottom;
@@ -124,15 +130,18 @@ document.addEventListener('keyup', function(e) {
   player.handleInput(allowedKeys[e.keyCode]);
 });
 
+// Win condition updates win count on UI
 function updateWinCount() {
   wins++;
   document.getElementById("wins").innerHTML = wins;
 }
 
+// Generates random speed for enemy bugs
 function getRandomSpeed() {
   return (1 + Math.random()) * enemySpeedMulitplier;
 }
 
+// Generates random starting row for enemy bugs
 function getRandomRow() {
   return Math.round(Math.random() * 2) * rowLength + canvas.limit.top;
 }

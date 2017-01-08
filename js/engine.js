@@ -27,6 +27,7 @@ var Engine = (function(global) {
 
     canvas.width = 505;
     canvas.height = 606;
+    // Set canvas limits to help with player and enemy allowable movements
     canvas.limit = {
       top: 60,
       bottom: 392,
