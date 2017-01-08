@@ -1,6 +1,24 @@
-frontend-nanodegree-arcade-game
-===============================
+Object Oriented Arcade Game
+===========================
 
-Students should use this [rubric](https://review.udacity.com/#!/projects/2696458597/rubric) for self-checking their submission. Make sure the functions you write are **object-oriented** - either class functions (like Player and Enemy) or class prototype functions such as Enemy.prototype.checkCollisions, and that the keyword 'this' is used appropriately within your class and class prototype functions to refer to the object the function is called upon. Also be sure that the **readme.md** file is updated with your instructions on both how to 1. Run and 2. Play your arcade game.
+This is a simple frogger style arcade game using **object-oriented** programming with a focus on the **prototypal inheritance chain**.
 
-For detailed instructions on how to get started, check out this [guide](https://docs.google.com/document/d/1v01aScPjSWCCWQLIpFqvg3-vXLH2e8_SZQKC8jNO0Dc/pub?embedded=true).
+## Getting Started
+
+Clone the repo
+
+    > git clone https://github.com/jtabach/frontend-nanodegree-arcade-game.git
+
+Navigate into the repo and open the index.html file in your browser
+
+    > cd frontend-nanodegree-arcade-game
+    > open index.html
+
+
+## How to Play
+
+Move your player using the arrow keys.
+
+Navigate across the cobble stone and into the water to win the game.
+
+Be sure to avoid enemy bugs, as a collision with them will cause you to start over.
