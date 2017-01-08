@@ -29,7 +29,7 @@ var Engine = (function(global) {
     canvas.height = 606;
     canvas.limit = {
       top: 60,
-      bottom: 386,
+      bottom: 392,
       left: 0,
       right: 404
     }
@@ -86,7 +86,6 @@ var Engine = (function(global) {
      */
     function update(dt) {
         updateEntities(dt);
-        // checkCollisions();
     }
 
     /* This is called by the update function and loops through all of the

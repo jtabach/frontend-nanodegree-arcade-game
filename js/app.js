@@ -1,16 +1,8 @@
 // Global Variables
-var colLength = 101;
-var rowLength = 83;
-
-function checkCollision(enemy) {
-  if (enemy.y === player.y && enemy.x > player.x - colLength/2 && enemy.x < player.x + colLength/2) {
-    player.reset();
-  }
-}
-
-function getRandomSpeed() {
-  return (1 + Math.random()) * 200;
-}
+var colLength = canvas.limit.right/4;
+var rowLength = (canvas.limit.bottom - canvas.limit.top)/4;
+var enemySpeedMulitplier = 200;
+var playerStart
 
 // Super class for creating Player and Enemy
 var Char = function(sprite, x, y) {
@@ -23,15 +15,10 @@ Char.prototype.render = function() {
   ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
-// Enemies our player must avoid
+// Enemies your player must avoid
 var Enemy = function(sprite, y, speed) {
-    // Variables applied to each of our instances go here,
-    // we've provided one for you to get started
-
-    // The image/sprite for our enemies, this uses
-    // a helper we've provided to easily load images
-    Char.call(this, sprite, -colLength, y)
-    this.speed = speed;
+  Char.call(this, sprite, -colLength, y)
+  this.speed = speed;
 };
 
 Enemy.prototype = Object.create(Char.prototype);
@@ -40,21 +27,22 @@ Enemy.prototype.constructor = Enemy;
 // Update the enemy's position, required method for game
 // Parameter: dt, a time delta between ticks
 Enemy.prototype.update = function(dt) {
-    // You should multiply any movement by the dt parameter
-    // which will ensure the game runs at the same speed for
-    // all computers.
-    if (this.x < canvas.limit.right + colLength) {
-      this.x += this.speed * dt;
-      checkCollision(this);
-    } else {
-      this.reset();
-    }
+  // You should multiply any movement by the dt parameter
+  // which will ensure the game runs at the same speed for
+  // all computers.
+  if (this.x < canvas.limit.right + colLength) {
+    this.x += this.speed * dt;
+    checkCollision(this);
+  } else {
+    this.reset();
+  }
 };
 
+// Reset Enemy with new row and speed
 Enemy.prototype.reset = function() {
   this.speed = getRandomSpeed();
   this.x = -colLength;
-  this.y = Math.round(Math.random() * 2) * rowLength + 60;
+  this.y = getRandomRow();
 }
 
 // Now write your own player class
@@ -91,7 +79,7 @@ Player.prototype.handleInput = function(direction) {
       if (this.y > canvas.limit.top) {
         this.update(0, -rowLength);
       } else {
-        console.log('winner');
+        console.log('winner'); // TODO: More exciting win condition
         this.reset();
       }
       break;
@@ -104,29 +92,43 @@ Player.prototype.handleInput = function(direction) {
 };
 
 Player.prototype.reset = function() {
-  this.x = 202;
-  this.y = 392;
+  this.x = canvas.limit.right/2;
+  this.y = canvas.limit.bottom;
 }
 
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
-var enemy1 = new Enemy('images/enemy-bug.png', 143, getRandomSpeed());
-var enemy2 = new Enemy('images/enemy-bug.png', 60, getRandomSpeed());
-var enemy3 = new Enemy('images/enemy-bug.png', 226, getRandomSpeed());
-var player = new Player('images/char-boy.png', 202, 392);
+var enemy1 = new Enemy('images/enemy-bug.png', getRandomRow(), getRandomSpeed());
+var enemy2 = new Enemy('images/enemy-bug.png', getRandomRow(), getRandomSpeed());
+var enemy3 = new Enemy('images/enemy-bug.png', getRandomRow(), getRandomSpeed());
+var player = new Player('images/char-boy.png', canvas.limit.right/2, canvas.limit.bottom);
 var allEnemies = [enemy1, enemy2, enemy3];
-
 
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
 document.addEventListener('keyup', function(e) {
-    var allowedKeys = {
-        37: 'left',
-        38: 'up',
-        39: 'right',
-        40: 'down'
-    };
+  var allowedKeys = {
+    37: 'left',
+    38: 'up',
+    39: 'right',
+    40: 'down'
+  };
 
-    player.handleInput(allowedKeys[e.keyCode]);
+  player.handleInput(allowedKeys[e.keyCode]);
 });
+
+// TODO: maybe this should be moved to a method on Enemy
+function checkCollision(enemy) {
+  if (enemy.y === player.y && enemy.x > player.x - colLength/2 && enemy.x < player.x + colLength/2) {
+    player.reset();
+  }
+}
+
+function getRandomSpeed() {
+  return (1 + Math.random()) * enemySpeedMulitplier;
+}
+
+function getRandomRow() {
+  return Math.round(Math.random() * 2) * rowLength + canvas.limit.top;
+}
