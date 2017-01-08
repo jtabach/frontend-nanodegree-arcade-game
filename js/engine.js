@@ -28,7 +28,7 @@ var Engine = (function(global) {
     canvas.width = 505;
     canvas.height = 606;
     canvas.limit = {
-      top: 54,
+      top: 60,
       bottom: 386,
       left: 0,
       right: 404

@@ -2,6 +2,12 @@
 var colLength = 101;
 var rowLength = 83;
 
+function checkCollision(enemy) {
+  if (enemy.y === player.y && enemy.x > player.x - colLength/2 && enemy.x < player.x + colLength/2) {
+    player.reset(player.x);
+  }
+}
+
 // Super class for creating Player and Enemy
 var Char = function(sprite, x, y) {
   this.sprite = sprite;
@@ -35,6 +41,7 @@ Enemy.prototype.update = function(dt) {
     // all computers.
     if (this.x < canvas.limit.right + colLength) {
       this.x += this.speed * dt;
+      checkCollision(this);
     } else {
       this.reset();
     }
@@ -99,7 +106,7 @@ Player.prototype.handleInput = function(direction) {
 
 Player.prototype.reset = function(x) {
   this.x = x;
-  this.y = 386;
+  this.y = 392;
 }
 
 // Now instantiate your objects.
@@ -108,7 +115,7 @@ Player.prototype.reset = function(x) {
 var enemy1 = new Enemy('images/enemy-bug.png', 143, 200);
 var enemy2 = new Enemy('images/enemy-bug.png', 60, 300);
 var enemy3 = new Enemy('images/enemy-bug.png', 226, 100);
-var player = new Player('images/char-boy.png', 202, 386);
+var player = new Player('images/char-boy.png', 202, 392);
 var allEnemies = [enemy1, enemy2, enemy3];
 
 
